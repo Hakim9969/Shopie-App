@@ -1,5 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString, Matches, MinLength, registerDecorator, ValidationArguments, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 
+
 @ValidatorConstraint({ name: 'MatchPasswords', async: false })
 class MatchPasswordsConstraint implements ValidatorConstraintInterface {
   validate(confirmPassword: string, args: ValidationArguments) {
@@ -41,5 +42,6 @@ export class RegisterDto {
   password: string;
 
   @IsNotEmpty()
+   @Match('password', { message: 'Passwords do not match' })
   confirmPassword: string;
 }
