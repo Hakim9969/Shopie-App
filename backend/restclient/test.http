@@ -1,0 +1,95 @@
+@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiaGFrZ290Y2hpbGxzQGdtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc1MDI4MTQ2NSwiZXhwIjoxNzUwMzY3ODY1fQ.3JD_ULTrVJfITuRh15vmAaLFXCXUGFoWD0NWkM_nmiU
+@customer_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsImVtYWlsIjoiamFuZUBleGFtcGxlLmNvbSIsInJvbGUiOiJDVVNUT01FUiIsImlhdCI6MTc1MDI4MTYyOCwiZXhwIjoxNzUwMzY4MDI4fQ.LP0TBhnNCYSx_Sjazi1ibNvtX2lA4JrxwVFfFX3QgVs
+### 📦 Register a new user (Success)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "name": "Jane Customer",
+  "email": "jane@example.com",
+  "password": "customer123",
+  "confirmPassword": "customer123"
+}
+
+###
+
+### ❌ Register with mismatched passwords (Fail)
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+  "name": "Fail User",
+  "email": "fail@example.com",
+  "password": "test1234",
+  "confirmPassword": "wrong123"
+}
+
+###
+
+### 🔐 Login as customer
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "jane@example.com",
+  "password": "customer123"
+}
+
+###
+
+### 🔐 Login as admin
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+  "email": "hakgotchills@gmail.com",
+  "password": "hakim200"
+}
+
+###
+
+### 🛒 Create product (Admin only)
+POST http://localhost:3000/product
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "name": "Blue T-Shirt",
+  "shortDescription": "Soft cotton t-shirt",
+  "price": 25.99,
+  "image": "https://example.com/image.jpg",
+  "quantityInStock": 10
+}
+
+###
+
+### 📋 Get all products
+GET http://localhost:3000/product
+
+###
+
+### 🔎 Search products
+GET http://localhost:3000/product/search?q=shirt
+
+###
+
+### 🔍 Get single product
+GET http://localhost:3000/product/1
+
+###
+
+### 🛒 Add product to cart
+POST http://localhost:3000/cart/2
+Authorization: Bearer {{customer_token}}
+
+###
+
+### 🧺 View cart
+GET http://localhost:3000/cart
+Authorization: Bearer {{customer_token}}
+
+###
+
+### ❌ Remove product from cart
+DELETE http://localhost:3000/cart/1
+Authorization: Bearer {{customer_token}}
