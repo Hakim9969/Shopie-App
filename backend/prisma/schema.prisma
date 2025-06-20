@@ -15,7 +15,7 @@ datasource db {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
+  id       String   @id @default(uuid())
   name     String
   email    String   @unique
   password String
@@ -23,11 +23,15 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  resetToken        String? 
+  resetTokenExpiry  DateTime? 
+
   Cart     CartItem[]
+  orders   Order[] 
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   name        String
   shortDescription String
   price       Float
@@ -37,16 +41,49 @@ model Product {
   updatedAt   DateTime @updatedAt
 
   CartItems   CartItem[]
+  orderItems      OrderItem[]
+
+   @@unique([name, shortDescription]) // 👈 Enforces compound uniqueness
 }
 
 model CartItem {
   id        Int     @id @default(autoincrement())
-  userId    Int
+  userId    String
   productId Int
   quantity  Int     @default(1)
 
   user      User    @relation(fields: [userId], references: [id])
   product   Product @relation(fields: [productId], references: [id])
+}
+
+
+model Order {
+  id         Int          @id @default(autoincrement())
+  userId     String
+  totalPrice Float
+  status     OrderStatus @default(PENDING)
+  createdAt  DateTime     @default(now())
+
+  user       User         @relation(fields: [userId], references: [id])
+  items      OrderItem[]
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  quantity  Int
+  price     Float
+
+  order     Order   @relation(fields: [orderId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+}
+
+enum OrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
 }
 
 enum Role {

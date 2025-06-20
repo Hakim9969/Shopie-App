@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { Prisma } from 'generated/prisma';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -6,9 +6,22 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ProductService {
     constructor(private prisma: PrismaService) {}
 
-  create(data: Prisma.ProductCreateInput) {
+   async create(data: Prisma.ProductCreateInput) {
+    // Check for existing product by name + description
+    const existing = await this.prisma.product.findFirst({
+      where: {
+        name: data.name,
+        shortDescription: data.shortDescription,
+      },
+    });
+
+    if (existing) {
+      throw new ConflictException('Product already exists');
+    }
+
     return this.prisma.product.create({ data });
   }
+
 
   findAll() {
     return this.prisma.product.findMany();
@@ -39,4 +52,19 @@ export class ProductService {
       },
     });
   }
+
+
+  async getLowStockProducts(threshold: number = 5) {
+  return this.prisma.product.findMany({
+    where: {
+      quantityInStock: {
+        lt: threshold,
+      },
+    },
+    orderBy: {
+      quantityInStock: 'asc',
+    },
+  });
+}
+
 }

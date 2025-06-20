@@ -17,7 +17,23 @@ export class UserService {
   }
 
   // Get user by ID
-  async findById(id: number) {
+  async findById(id: string) { // changed from number to string
     return this.prisma.user.findUnique({ where: { id } });
   }
+
+  // 🔍 Find user by reset token
+async findByResetToken(token: string) {
+  return this.prisma.user.findFirst({
+    where: { resetToken: token },
+  });
+}
+
+// 🛠️ Update user
+async updateUser(id: string, data: Prisma.UserUpdateInput) {
+  return this.prisma.user.update({
+    where: { id },
+    data,
+  });
+}
+
 }

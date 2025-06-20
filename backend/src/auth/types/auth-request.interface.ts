@@ -5,7 +5,7 @@ import { Role } from 'generated/prisma';
 
 export interface AuthRequest extends Request {
   user: {
-    userId: number;
+    userId: string; // changed from number to string
     email: string;
     role: Role;
   };

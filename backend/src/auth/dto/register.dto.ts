@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsString, Matches, MinLength, registerDecorator, ValidationArguments, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 
 
@@ -29,9 +30,11 @@ export function Match(property: string, validationOptions?: ValidationOptions) {
 export class RegisterDto {
   @IsString()
   @IsNotEmpty()
+   @ApiProperty({ example: 'John Doe' })
   name: string;
 
   @IsEmail()
+  @ApiProperty({ example: 'john@example.com' })
   email: string;
 
   @IsString()
@@ -39,9 +42,11 @@ export class RegisterDto {
   @Matches(/^(?=.*\d).+$/, {
     message: 'Password must contain at leats one number',
   })
+    @ApiProperty({ example: 'pass1234' })
   password: string;
 
   @IsNotEmpty()
-   @Match('password', { message: 'Passwords do not match' })
+  @Match('password', { message: 'Passwords do not match' })
+    @ApiProperty({ example: 'pass1234' })
   confirmPassword: string;
 }

@@ -1,14 +1,13 @@
-@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjMsImVtYWlsIjoiaGFrZ290Y2hpbGxzQGdtYWlsLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc1MDI4MTQ2NSwiZXhwIjoxNzUwMzY3ODY1fQ.3JD_ULTrVJfITuRh15vmAaLFXCXUGFoWD0NWkM_nmiU
-@customer_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjYsImVtYWlsIjoiamFuZUBleGFtcGxlLmNvbSIsInJvbGUiOiJDVVNUT01FUiIsImlhdCI6MTc1MDI4MTYyOCwiZXhwIjoxNzUwMzY4MDI4fQ.LP0TBhnNCYSx_Sjazi1ibNvtX2lA4JrxwVFfFX3QgVs
-### 📦 Register a new user (Success)
+@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5YjE5ZjEzYy1mOGUwLTRiOTEtYjI4OS1jNzU4NWRjYTNiZGMiLCJlbWFpbCI6Imhha2dvdGNoaWxsc0BnbWFpbC5jb20iLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3NTAzMjQ2OTksImV4cCI6MTc1MDQxMTA5OX0.lNFxYDaXvrZ-S6O6fAs3o0WZtWVfeVsyeGSFkjMCToE
+@customer_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNWYzZjEwNy03MjRkLTRhODEtYjYyYS0wMDkwZDljZmZmNzMiLCJlbWFpbCI6Imp1c3RoYWtpbW1AZ21haWwuY29tIiwicm9sZSI6IkNVU1RPTUVSIiwiaWF0IjoxNzUwMzI0Nzc0LCJleHAiOjE3NTA0MTExNzR9.rT0aK0zlGSqdHydN2JjzAl9UVrpuNL0hpYqb7fO20G4
 POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-  "name": "Jane Customer",
-  "email": "jane@example.com",
-  "password": "customer123",
-  "confirmPassword": "customer123"
+  "name": "Abdul Hakim",
+  "email": "hakgotchills@gmail.com",
+  "password": "hakim200",
+  "confirmPassword": "hakim200"
 }
 
 ###
@@ -18,10 +17,10 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-  "name": "Fail User",
-  "email": "fail@example.com",
-  "password": "test1234",
-  "confirmPassword": "wrong123"
+  "name": "Kentrell",
+  "email": "justhakimm@gmail.com",
+  "password": "hakim200",
+  "confirmPassword": "hakim200"
 }
 
 ###
@@ -31,8 +30,8 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-  "email": "jane@example.com",
-  "password": "customer123"
+  "email": "justhakimm@gmail.com",
+  "password": "hakim200"
 }
 
 ###
@@ -48,20 +47,81 @@ Content-Type: application/json
 
 ###
 
+### Forgot Password Request
+POST http://localhost:3000/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "justhakimm@gmail.com"
+}
+
+###
+
+### Reset Password Using Token
+POST http://localhost:3000/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlNWYzZjEwNy03MjRkLTRhODEtYjYyYS0wMDkwZDljZmZmNzMiLCJlbWFpbCI6Imp1c3RoYWtpbW1AZ21haWwuY29tIiwicm9sZSI6IkNVU1RPTUVSIiwiaWF0IjoxNzUwMzI0Nzc0LCJleHAiOjE3NTA0MTExNzR9.rT0aK0zlGSqdHydN2JjzAl9UVrpuNL0hpYqb7fO20G4",
+  "password": "hakimm200"
+}
+
+
+###
+
 ### 🛒 Create product (Admin only)
 POST http://localhost:3000/product
 Content-Type: application/json
 Authorization: Bearer {{admin_token}}
 
 {
-  "name": "Blue T-Shirt",
+  "name": "Purple T-Shirt",
   "shortDescription": "Soft cotton t-shirt",
   "price": 25.99,
   "image": "https://example.com/image.jpg",
   "quantityInStock": 10
 }
 
+
 ###
+
+### ❌ Create product (Customer)
+POST http://localhost:3000/product
+Authorization: Bearer {{customer_token}}
+Content-Type: application/json
+
+{
+  "name": "Red Hoodie",
+  "shortDescription": "Cozy warm hoodie",
+  "price": 45.99,
+  "image": "https://example.com/hoodie.jpg",
+  "quantityInStock": 5
+}
+
+###
+
+### 🛒 Update product
+PUT http://localhost:3000/product/1
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+  "price": 29.99,
+  "quantityInStock": 26
+}
+
+### ❌ Delete product (admin)
+DELETE http://localhost:3000/product/1
+Authorization: Bearer {{admin_token}}
+
+### ❌ Delete product (customer)
+DELETE http://localhost:3000/product/1
+Authorization: Bearer {{customer_token}}
+
+
+### Get cat while not logged in
+GET http://localhost:3000/cart
+
 
 ### 📋 Get all products
 GET http://localhost:3000/product
@@ -79,7 +139,7 @@ GET http://localhost:3000/product/1
 ###
 
 ### 🛒 Add product to cart
-POST http://localhost:3000/cart/2
+POST http://localhost:3000/cart/1
 Authorization: Bearer {{customer_token}}
 
 ###
@@ -91,5 +151,99 @@ Authorization: Bearer {{customer_token}}
 ###
 
 ### ❌ Remove product from cart
-DELETE http://localhost:3000/cart/1
+DELETE http://localhost:3000/cart/4
 Authorization: Bearer {{customer_token}}
+
+
+###
+
+### 🛒 Place order
+POST http://localhost:3000/order/checkout
+Authorization: Bearer {{customer_token}}
+
+###
+
+### 📦 View my orders
+GET http://localhost:3000/order/my-orders
+Authorization: Bearer {{customer_token}}
+
+### Get a Specific Order by ID (replace ORDER_ID and JWT_TOKEN)
+GET http://localhost:3000/order/4
+Authorization: Bearer {{customer_token}}
+
+
+### ❌ Cancel order
+PATCH http://localhost:3000/order/4/cancel
+Authorization: Bearer {{customer_token}}
+
+### ❌ Cancel order (Admin)
+PATCH http://localhost:3000/order/4/cancel
+Authorization: Bearer {{admin_token}}
+
+### Admin View All Orders
+GET http://localhost:3000/order
+Authorization: Bearer {{admin_token}}
+
+### User View All Orders
+GET http://localhost:3000/order
+Authorization: Bearer {{customer_token}}
+
+### Update order status (Admin)
+PATCH http://localhost:3000/order/3/status
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+  "status": "DELIVERED"
+}
+
+### ❌ Update order status (Customer)
+
+PATCH http://localhost:3000/order/4/status
+Authorization: Bearer {{customer_token}}
+Content-Type: application/json
+
+{
+  "status": "SHIPPED"
+}
+
+
+### Admin delete order
+DELETE http://localhost:3000/order/4
+Authorization: Bearer {{admin_token}}
+
+### ❌ Customer delete order
+DELETE http://localhost:3000/order/4
+Authorization: Bearer {{customer_token}}
+
+
+### Admin View All Orders by status
+GET http://localhost:3000/order?status=CANCELLED
+Authorization: Bearer {{admin_token}}
+
+### Admin Search user by name and display 
+GET http://localhost:3000/order?search=Kentrell
+Authorization: Bearer {{admin_token}}
+
+### Admin View shipped by a user
+GET http://localhost:3000/order?status=SHIPPED&search=kentrell
+Authorization: Bearer {{admin_token}}
+
+###### Admin View orders by date range
+GET http://localhost:3000/order?from=2024-01-01&to=2024-12-31
+Authorization: Bearer {{admin_token}}
+
+### Admin View orders by status, search, and date range
+GET http://localhost:3000/order?status=SHIPPED&search=john&from=2024-01-01&to=2024-06-30
+Authorization: Bearer {{admin_token}}
+
+### Admin View Order Stats
+GET http://localhost:3000/order/stats
+Authorization: Bearer {{admin_token}}
+
+
+### Get low stock products
+GET http://localhost:3000/product/low-stock?threshold=11
+Authorization: Bearer {{admin_token}}
+
+

@@ -5,7 +5,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class CartService {
     constructor(private prisma: PrismaService) {}
 
-  async addToCart(userId: number, productId: number) {
+  async addToCart(userId: string, productId: number) {
     const product = await this.prisma.product.findUnique({ where: { id: productId } });
     if (!product) throw new NotFoundException('Product not found');
     if (product.quantityInStock < 1) throw new BadRequestException('Out of stock');
@@ -33,14 +33,14 @@ export class CartService {
     });
   }
 
-  async getCart(userId: number) {
+  async getCart(userId: string) {
     return this.prisma.cartItem.findMany({
       where: { userId },
       include: { product: true },
     });
   }
 
-  async removeFromCart(userId: number, productId: number) {
+  async removeFromCart(userId: string, productId: number) { // changed from number to string
     const existing = await this.prisma.cartItem.findFirst({
       where: { userId, productId },
     });
